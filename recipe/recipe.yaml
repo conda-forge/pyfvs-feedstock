@@ -1,7 +1,7 @@
 schema_version: 1
 
 context:
-  version: 0.3.7
+  version: "0.3.9"
 
 package:
   name: pyfvs
@@ -9,21 +9,19 @@ package:
 
 source:
   url: https://pypi.org/packages/source/p/pyfvs/pyfvs-${{ version }}.tar.gz
-  sha256: 43afe8edd712a5e76c261a047c8329ebc554dffa60b3de568beee068f485c639
+  sha256: bafc20fa5334619c603b96e61b67c5634625f21b993e90e5cbeead10976dc4e9
 
 build:
   number: 0
   script:
-  - if: win
-    then: |
-      :: Use Meson's selected C compiler instead of upstream's hard-coded gcc
-      sed -i "s/'gcc','-v'/cc.cmd_array() + ['-v']/" meson.build
-      :: Prevent Meson to use ninja instead of vs
-      ${{ PYTHON }} -m pip install . --no-build-isolation --no-deps -vv -Csetup-args="--backend=ninja" --config-settings=setup-args="-Dbuildtype=release" --config-settings=setup-args="-Dfvsvariants=pn"
-  - if: not win
-    then: |
-      ${{ PYTHON }} -m pip install . --no-build-isolation --no-deps -vv --config-settings=setup-args="-Dbuildtype=release" --config-settings=setup-args="-Dfvsvariants=pn"
-
+    - if: win
+      then: |
+        :: Use Meson's selected C compiler instead of upstream's hard-coded gcc
+        sed -i "s/'gcc','-v'/cc.cmd_array() + ['-v']/" meson.build
+        :: Prevent Meson to use ninja instead of vs
+        ${{ PYTHON }} -m pip install . --no-build-isolation --no-deps -vv -Csetup-args="--backend=ninja" --config-settings=setup-args="-Dbuildtype=release" --config-settings=setup-args="-Dfvsvariants=pn"
+      else: |
+        ${{ PYTHON }} -m pip install . --no-build-isolation --no-deps -vv --config-settings=setup-args="-Dbuildtype=release" --config-settings=setup-args="-Dfvsvariants=pn"
 requirements:
   build:
     - meson
@@ -38,15 +36,12 @@ requirements:
         - ${{ compiler('fortran') }}
         - ${{ stdlib('c') }}
 
-    - if: win
-      then:
+      else:
         - ${{ compiler('m2w64_c') }}
         - ${{ compiler('m2w64_cxx') }}
         - ${{ compiler('m2w64_fortran') }}
         - ${{ stdlib('m2w64_c') }}
         - m2-sed
-
-    # Non-Windows targets use the default UNIX toolchain
     - if: linux
       then:
         - patchelf
@@ -59,7 +54,7 @@ requirements:
     - wheel
     - meson-python >=0.20.0
     - numpy
-    
+
   run:
     - python
     - confuse
