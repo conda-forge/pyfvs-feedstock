@@ -1,7 +1,7 @@
 schema_version: 1
 
 context:
-  version: "0.3.9"
+  version: "0.3.10"
 
 package:
   name: pyfvs
@@ -9,10 +9,10 @@ package:
 
 source:
   url: https://pypi.org/packages/source/p/pyfvs/pyfvs-${{ version }}.tar.gz
-  sha256: bafc20fa5334619c603b96e61b67c5634625f21b993e90e5cbeead10976dc4e9
+  sha256: 1dcbd3720228e08c73bbc52e4a51d718fb5a87d5bc7ff0526223a214085ca1b4
 
 build:
-  number: 1
+  number: 0
   script:
     - if: win
       then: |
