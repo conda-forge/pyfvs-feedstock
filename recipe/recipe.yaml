@@ -19,9 +19,9 @@ build:
         :: Use Meson's selected C compiler instead of upstream's hard-coded gcc
         sed -i "s/'gcc','-v'/cc.cmd_array() + ['-v']/" meson.build
         :: Prevent Meson to use ninja instead of vs
-        ${{ PYTHON }} -m pip install . --no-build-isolation --no-deps -vv -Csetup-args="--backend=ninja" --config-settings=setup-args="-Dbuildtype=release" --config-settings=setup-args="-Dfvsvariants=pn"
+        ${{ PYTHON }} -m pip install . --no-build-isolation --no-deps -vv -Csetup-args="--backend=ninja" --config-settings=setup-args="-Dbuildtype=release"
       else: |
-        ${{ PYTHON }} -m pip install . --no-build-isolation --no-deps -vv --config-settings=setup-args="-Dbuildtype=release" --config-settings=setup-args="-Dfvsvariants=pn"
+        ${{ PYTHON }} -m pip install . --no-build-isolation --no-deps -vv --config-settings=setup-args="-Dbuildtype=release"
 requirements:
   build:
     - meson
